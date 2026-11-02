@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="BookNook logo mark">
+  <rect width="64" height="64" rx="16" fill="#2f5d46"/>
+  <path d="M12 21 Q22 16 32 22 V49 Q22 43 12 47 Z" fill="#f7f1e3"/>
+  <path d="M52 21 Q42 16 32 22 V49 Q42 43 52 47 Z" fill="#efe5cc"/>
+  <path d="M40 10 h9 v19 l-4.5 -4 l-4.5 4 z" fill="#e9a93b"/>
+</svg>
