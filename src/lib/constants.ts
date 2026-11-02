@@ -1,3 +1,5 @@
+import type { Category } from "@/types";
+
 export const SITE = {
   name: "BookNook",
   tagline: "Add a book, borrow a book, return a book.",
@@ -26,3 +28,5 @@ export const SOCIAL_LINKS = {
   instagram: "https://instagram.com",
   github: "https://github.com/ABiR994",
 } as const;
+
+export const CATEGORIES: readonly Category[] = ["Fiction", "Science", "History", "Kids", "Others"];

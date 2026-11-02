@@ -69,3 +69,47 @@ export async function searchBooks(
   const data = (await response.json()) as OpenLibrarySearchResponse;
   return data.docs.map(toBook).filter((book): book is Book => book !== null);
 }
+
+// Only the fields we use from the Open Library Subjects API.
+interface SubjectWork {
+  key?: string;
+  title?: string;
+  authors?: { name?: string }[];
+  cover_id?: number | null;
+  first_publish_year?: number;
+}
+
+interface SubjectResponse {
+  works: SubjectWork[];
+}
+
+/**
+ * Books of one subject (for example "history" or "juvenile_literature").
+ * The Subjects API is faster and more reliable than a big search for a whole category.
+ * Throws if the request fails or times out.
+ */
+export async function getBooksBySubject(subject: string, category: Category, limit = 24): Promise<Book[]> {
+  const response = await fetch(`${BASE_URL}/subjects/${subject}.json?limit=${limit}`, {
+    headers: { "User-Agent": `BookNook (${CONTACT.email})` },
+    signal: AbortSignal.timeout(15000),
+    next: { revalidate: 3600 },
+  });
+
+  if (!response.ok) throw new Error(`Open Library responded with ${response.status}`);
+
+  const data = (await response.json()) as SubjectResponse;
+  return data.works.flatMap((work): Book[] => {
+    const authors = work.authors?.map((author) => author.name).filter(Boolean).join(", ");
+    if (!work.key || !work.title || !authors) return [];
+    return [
+      {
+        _id: work.key.replace("/works/", ""),
+        title: work.title,
+        author: authors,
+        category,
+        image: work.cover_id ? coverUrl(work.cover_id) : null,
+        firstPublishYear: work.first_publish_year,
+      },
+    ];
+  });
+}
