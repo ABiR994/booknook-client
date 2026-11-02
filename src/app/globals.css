@@ -107,3 +107,15 @@
 @utility btn-outline {
   @apply btn border border-border bg-transparent text-foreground hover:bg-secondary;
 }
+
+@utility btn-accent {
+  @apply btn bg-accent text-accent-foreground hover:bg-accent/90;
+}
+
+/* Hero slider: hide arrows on small screens, keep the dots */
+@media (max-width: 767px) {
+  .hero-swiper .swiper-button-prev,
+  .hero-swiper .swiper-button-next {
+    display: none;
+  }
+}
