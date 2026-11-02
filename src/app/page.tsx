@@ -1,5 +1,6 @@
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { HowItWorks } from "@/components/home/HowItWorks";
+import { TopCategories } from "@/components/home/TopCategories";
 import { NewArrivals } from "@/components/home/NewArrivals";
 
 // A layout's title template does not apply to the page in the same segment,
@@ -12,6 +13,7 @@ export default function HomePage() {
       <HeroSlider />
       <NewArrivals />
       <HowItWorks />
+      <TopCategories />
     </>
   );
 }

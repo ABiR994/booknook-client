@@ -22,3 +22,11 @@ export const howItWorks = [
   { step: "03", title: "Borrow it", text: "Confirm the loan and the book is yours for a few days." },
   { step: "04", title: "Return it", text: "Open My Borrows and press Return Book so the next reader can enjoy it." },
 ];
+
+export const topCategories = [
+  { name: "Fiction", text: "Novels and short stories that take you somewhere else." },
+  { name: "Science", text: "Clear explanations of how the world works." },
+  { name: "History", text: "People, places and events that shaped today." },
+  { name: "Kids", text: "Picture books and tales for young readers." },
+  { name: "Others", text: "Hobbies, wellbeing, guides and everything in between." },
+];
