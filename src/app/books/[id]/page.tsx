@@ -97,7 +97,7 @@ export default async function BookDetailsPage({ params }: Props) {
           </dl>
 
           <div className="mt-8">
-            <BorrowButton available={available} />
+            <BorrowButton bookId={book._id} title={book.title} available={available} />
           </div>
         </div>
       </div>
