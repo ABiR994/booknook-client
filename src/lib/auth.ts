@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { nextCookies } from "better-auth/next-js";
+import { jwt } from "better-auth/plugins";
 import { db, mongoClient } from "@/lib/mongodb";
 
 export const auth = betterAuth({
@@ -19,5 +20,7 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
-  plugins: [nextCookies()],
+  // The jwt plugin issues tokens at /api/auth/token and publishes keys at /api/auth/jwks.
+  // The Express server uses those keys to verify the tokens.
+  plugins: [jwt(), nextCookies()],
 });
