@@ -13,6 +13,7 @@ export function BookCard({ book }: { book: Book }) {
             alt={`Cover of ${book.title}`}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            unoptimized={book.image.includes("covers.openlibrary.org")}
             className="object-cover"
           />
         ) : (

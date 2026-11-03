@@ -9,7 +9,7 @@ if (!uri) {
 // Reuse one client in development so hot reloads do not open new connections.
 const globalForMongo = globalThis as unknown as { _mongoClient?: MongoClient };
 
-export const mongoClient = globalForMongo._mongoClient ?? new MongoClient(uri);
+export const mongoClient = globalForMongo._mongoClient ?? new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
 
 if (process.env.NODE_ENV !== "production") {
   globalForMongo._mongoClient = mongoClient;

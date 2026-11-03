@@ -1,47 +1,29 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 import type { AuthUser } from "@/types";
 
-/**
- * Single place the UI reads the logged in user from.
- *
- * TEMPORARY: authentication (Better Auth) is not set up yet, so this hook returns a
- * logged out user. Set NEXT_PUBLIC_MOCK_AUTH=true in .env.local to preview the
- * logged in navbar. When Better Auth is added, replace the body of `useAuth`
- * with `authClient.useSession()` and `authClient.signOut()`; the navbar stays the same.
- */
-
-const MOCK_USER: AuthUser = {
-  id: "mock-user",
-  name: "Demo Reader",
-  email: "demo.reader@booknook.example",
-  image: "/mock-avatar.svg",
-};
-
-let mockLoggedIn = process.env.NEXT_PUBLIC_MOCK_AUTH === "true";
-const listeners = new Set<() => void>();
-
-const subscribe = (listener: () => void) => {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-};
-
-const logout = async () => {
-  mockLoggedIn = false;
-  listeners.forEach((listener) => listener());
-};
-
+/** Single place the UI reads the logged in user from (Better Auth session). */
 export function useAuth() {
-  const loggedIn = useSyncExternalStore(
-    subscribe,
-    () => mockLoggedIn,
-    () => mockLoggedIn,
-  );
+  const router = useRouter();
+  const { data, isPending } = authClient.useSession();
 
-  return {
-    user: loggedIn ? MOCK_USER : null,
-    isPending: false,
-    logout,
-  };
+  const user: AuthUser | null = data?.user
+    ? { id: data.user.id, name: data.user.name, email: data.user.email, image: data.user.image }
+    : null;
+
+  async function logout() {
+    const { error } = await authClient.signOut();
+    if (error) {
+      toast.error("Could not log out. Please try again.");
+      return;
+    }
+    toast.success("You have been logged out.");
+    router.push("/");
+    router.refresh();
+  }
+
+  return { user, isPending, logout };
 }
