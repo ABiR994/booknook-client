@@ -1,70 +1,59 @@
-import { CATEGORIES } from "@/lib/constants";
-import { getBooksBySubject, searchBooks } from "@/lib/open-library";
 import type { Book, Category } from "@/types";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+// Public books route of the Express server. `no-store` so new books show up straight away.
+async function fetchBooks(query = ""): Promise<Book[]> {
+  const response = await fetch(`${API_URL}/books${query}`, {
+    cache: "no-store",
+    signal: AbortSignal.timeout(8000),
+  });
+
+  if (!response.ok) throw new Error(`The server responded with ${response.status}`);
+  return (await response.json()) as Book[];
+}
+
 /**
- * Latest books for the New Arrivals section, newest first.
- * Data comes from the Open Library API. Only books with a cover are used.
- * Returns an empty list when Open Library cannot be reached.
+ * Latest books for the New Arrivals section, newest first (MongoDB sort + limit on the server).
+ * Returns an empty list when the server cannot be reached.
  */
 export async function getLatestBooks(limit = 6): Promise<Book[]> {
   try {
-    // Ask for extra results because some books have no cover and are skipped.
-    const books = await searchBooks("first_publish_year:[2020 TO 2026]", { limit: 40, sort: "new" });
-    return books.filter((book) => book.image).slice(0, limit);
+    return await fetchBooks(`?sort=newest&limit=${limit}`);
   } catch {
     return [];
   }
 }
 
-// Open Library subjects for each BookNook category. Very large subjects (like plain
-// "history") can be slow, so History uses several smaller subjects that are merged.
-const CATEGORY_SUBJECTS: Record<Category, string[]> = {
-  Fiction: ["fiction"],
-  Science: ["science"],
-  History: ["world_history", "ancient_history", "military_history"],
-  Kids: ["juvenile_literature"],
-  Others: ["cooking"],
-};
-
 export type BooksResult = { books: Book[]; failed: boolean };
 
-// Loads every subject of a category in parallel and merges the results.
-// Throws only when all of its subjects fail.
-async function loadCategory(category: Category, perSubject: number): Promise<Book[]> {
-  const subjects = CATEGORY_SUBJECTS[category];
-  const results = await Promise.allSettled(
-    subjects.map((subject) => getBooksBySubject(subject, category, perSubject)),
-  );
-
-  results.forEach((result, index) => {
-    if (result.status === "rejected") {
-      console.error(`[Open Library] subject "${subjects[index]}" failed:`, result.reason);
-    }
-  });
-
-  const lists = results.flatMap((result) => (result.status === "fulfilled" ? [result.value] : []));
-  if (lists.length === 0) throw new Error(`No Open Library data for ${category}`);
-  return lists.flat();
+/** All books for the All Books page, newest first, optionally for one category. */
+export async function getAllBooks(category?: Category): Promise<BooksResult> {
+  try {
+    const books = await fetchBooks("?sort=newest");
+    return { books: category ? books.filter((book) => book.category === category) : books, failed: false };
+  } catch {
+    return { books: [], failed: true };
+  }
 }
 
+export type BookResult = { book: Book | null; failed: boolean };
+
 /**
- * Books for the All Books page, optionally for one category.
- * Data comes from Open Library; only books with a cover are listed.
+ * One book for the Book Details page.
+ * `book` is null when it does not exist; `failed` is true when the server cannot be reached.
  */
-export async function getAllBooks(category?: Category): Promise<BooksResult> {
-  const categories = category ? [category] : CATEGORIES;
-  const perCategory = category ? 24 : 5;
-
-  const results = await Promise.allSettled(categories.map((item) => loadCategory(item, 30)));
-
-  const lists = results.flatMap((result) => (result.status === "fulfilled" ? [result.value] : []));
-  if (lists.length === 0) return { books: [], failed: true };
-
-  const seen = new Set<string>();
-  const books = lists
-    .flatMap((list) => list.filter((book) => book.image).slice(0, perCategory))
-    .filter((book) => !seen.has(book._id) && seen.add(book._id));
-
-  return { books, failed: false };
+export async function getBookById(id: string): Promise<BookResult> {
+  try {
+    const response = await fetch(`${API_URL}/books/${encodeURIComponent(id)}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    // 400 (invalid id) and 404 both mean there is no such book.
+    if (response.status === 404 || response.status === 400) return { book: null, failed: false };
+    if (!response.ok) throw new Error(`The server responded with ${response.status}`);
+    return { book: (await response.json()) as Book, failed: false };
+  } catch {
+    return { book: null, failed: true };
+  }
 }

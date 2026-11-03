@@ -25,7 +25,7 @@ export async function NewArrivals() {
           </div>
         ) : (
           <p className="mt-10 text-center text-muted-foreground">
-            New arrivals could not be loaded right now. Please try again in a moment.
+            There are no new arrivals to show right now. Please try again in a moment.
           </p>
         )}
 
