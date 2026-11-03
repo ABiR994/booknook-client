@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { SocialLogin } from "@/components/auth/SocialLogin";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { FormField, inputClass } from "@/components/shared/FormField";
 import { authClient } from "@/lib/auth-client";
@@ -64,6 +65,8 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
           {pending ? "Logging in..." : "Login"}
         </button>
       </fieldset>
+
+      <SocialLogin callbackURL={redirectTo} />
 
       <p className="mt-5 text-center text-sm text-muted-foreground">
         New to BookNook?{" "}
