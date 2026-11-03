@@ -11,6 +11,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { apiFetch } from "@/lib/api";
 import { CATEGORIES } from "@/lib/constants";
 import { uploadToImgbb } from "@/lib/imgbb";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export function AddBookForm() {
   const { user, isPending: sessionPending } = useAuth();
@@ -77,10 +80,10 @@ export function AddBookForm() {
       <fieldset disabled={pending} className="space-y-5">
         <div className="grid gap-5 sm:grid-cols-2">
           <FormField id="title" label="Book Title">
-            <input id="title" name="title" type="text" required maxLength={150} placeholder="The title of the book" className={inputClass} />
+            <Input id="title" name="title" type="text" required maxLength={150} placeholder="The title of the book" className={inputClass} />
           </FormField>
           <FormField id="author" label="Author Name">
-            <input id="author" name="author" type="text" required maxLength={100} placeholder="Who wrote it" className={inputClass} />
+            <Input id="author" name="author" type="text" required maxLength={100} placeholder="Who wrote it" className={inputClass} />
           </FormField>
         </div>
 
@@ -98,7 +101,7 @@ export function AddBookForm() {
             </select>
           </FormField>
           <FormField id="totalCopies" label="Total Copies">
-            <input id="totalCopies" name="totalCopies" type="number" required min={1} max={1000} step={1} defaultValue={1} className={inputClass} />
+            <Input id="totalCopies" name="totalCopies" type="number" required min={1} max={1000} step={1} defaultValue={1} className={inputClass} />
           </FormField>
         </div>
 
@@ -123,22 +126,22 @@ export function AddBookForm() {
         </FormField>
 
         <FormField id="description" label="Short Description">
-          <textarea id="description" name="description" required maxLength={1000} rows={4} placeholder="What is the book about?" className={textareaClass} />
+          <Textarea id="description" name="description" required maxLength={1000} rows={4} placeholder="What is the book about?" className={textareaClass} />
         </FormField>
 
         <div className="grid gap-5 sm:grid-cols-2">
           <FormField id="userName" label="Your Name">
-            <input id="userName" type="text" readOnly value={user?.name ?? ""} className={`${inputClass} bg-muted text-muted-foreground`} />
+            <Input id="userName" type="text" readOnly value={user?.name ?? ""} className={`${inputClass} bg-muted text-muted-foreground`} />
           </FormField>
           <FormField id="userEmail" label="Your Email">
-            <input id="userEmail" type="email" readOnly value={user?.email ?? ""} className={`${inputClass} bg-muted text-muted-foreground`} />
+            <Input id="userEmail" type="email" readOnly value={user?.email ?? ""} className={`${inputClass} bg-muted text-muted-foreground`} />
           </FormField>
         </div>
 
-        <button type="submit" className="btn-primary w-full">
+        <Button type="submit" className="w-full">
           {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
           {pending ? "Adding book..." : "Add Book"}
-        </button>
+        </Button>
       </fieldset>
 
       <p className="mt-5 text-center text-sm text-muted-foreground">

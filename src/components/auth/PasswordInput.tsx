@@ -2,6 +2,7 @@
 
 import { useState, type ComponentProps } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { inputClass } from "@/components/shared/FormField";
 
 export function PasswordInput(props: Omit<ComponentProps<"input">, "type" | "className">) {
@@ -9,7 +10,7 @@ export function PasswordInput(props: Omit<ComponentProps<"input">, "type" | "cla
 
   return (
     <div className="relative">
-      <input {...props} type={visible ? "text" : "password"} className={`${inputClass} pr-12`} />
+      <Input {...props} type={visible ? "text" : "password"} className={`${inputClass} pr-12`} />
       <button
         type="button"
         onClick={() => setVisible((value) => !value)}

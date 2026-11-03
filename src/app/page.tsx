@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/shared/Reveal";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { TopCategories } from "@/components/home/TopCategories";
@@ -11,9 +12,15 @@ export default function HomePage() {
   return (
     <>
       <HeroSlider />
-      <NewArrivals />
-      <HowItWorks />
-      <TopCategories />
+      <Reveal>
+        <NewArrivals />
+      </Reveal>
+      <Reveal>
+        <HowItWorks />
+      </Reveal>
+      <Reveal>
+        <TopCategories />
+      </Reveal>
     </>
   );
 }

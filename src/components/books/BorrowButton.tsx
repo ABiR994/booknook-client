@@ -9,10 +9,10 @@ import { Modal } from "@/components/shared/Modal";
 import { useAuth } from "@/hooks/use-auth";
 import { apiFetch } from "@/lib/api";
 import type { Borrow } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type BorrowButtonProps = { bookId: string; title: string; available: boolean };
-
-const readOnlyClass = `${inputClass} bg-muted text-muted-foreground`;
 
 /** "Borrow This Book" button and the confirm modal for the Book Details page. */
 export function BorrowButton({ bookId, title, available }: BorrowButtonProps) {
@@ -23,9 +23,9 @@ export function BorrowButton({ bookId, title, available }: BorrowButtonProps) {
 
   if (!available) {
     return (
-      <button type="button" disabled className="btn-primary w-full sm:w-auto">
+      <Button type="button" disabled className="w-full sm:w-auto">
         Not Available
-      </button>
+      </Button>
     );
   }
 
@@ -64,9 +64,9 @@ export function BorrowButton({ bookId, title, available }: BorrowButtonProps) {
 
   return (
     <>
-      <button type="button" onClick={handleOpen} className="btn-primary w-full sm:w-auto">
+      <Button type="button" onClick={handleOpen} className="w-full sm:w-auto">
         Borrow This Book
-      </button>
+      </Button>
 
       <Modal
         open={open}
@@ -77,16 +77,16 @@ export function BorrowButton({ bookId, title, available }: BorrowButtonProps) {
         <form onSubmit={handleSubmit}>
           <fieldset disabled={pending} className="space-y-5">
             <FormField id="borrowName" label="Your Name">
-              <input id="borrowName" type="text" readOnly value={user?.name ?? ""} className={readOnlyClass} />
+              <Input id="borrowName" type="text" readOnly value={user?.name ?? ""} className={`${inputClass} bg-muted text-muted-foreground`} />
             </FormField>
             <FormField id="borrowEmail" label="Your Email">
-              <input id="borrowEmail" type="email" readOnly value={user?.email ?? ""} className={readOnlyClass} />
+              <Input id="borrowEmail" type="email" readOnly value={user?.email ?? ""} className={`${inputClass} bg-muted text-muted-foreground`} />
             </FormField>
 
-            <button type="submit" className="btn-primary w-full">
+            <Button type="submit" className="w-full">
               {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
               {pending ? "Borrowing..." : "Confirm Borrow"}
-            </button>
+            </Button>
           </fieldset>
         </form>
       </Modal>

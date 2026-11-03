@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { BookOpen, LogOut, Plus, Repeat } from "lucide-react";
-import { Avatar } from "@base-ui/react/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/shared/Spinner";
 import { useAuth } from "@/hooks/use-auth";
 import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 
 const shortcuts = [
   { label: "Add Book", href: "/add-book", Icon: Plus },
@@ -51,11 +53,11 @@ export function ProfileCard() {
     : null;
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center shadow-sm sm:p-8">
-      <Avatar.Root className="mx-auto flex size-28 items-center justify-center overflow-hidden rounded-full bg-primary text-3xl font-semibold text-primary-foreground ring-4 ring-secondary">
-        {user.image && <Avatar.Image src={user.image} alt={user.name} className="size-full object-cover" />}
-        <Avatar.Fallback>{initials(user.name)}</Avatar.Fallback>
-      </Avatar.Root>
+    <Card className="mx-auto w-full max-w-md rounded-2xl p-6 text-center sm:p-8">
+      <Avatar className="mx-auto size-28 text-3xl ring-4 ring-secondary">
+        {user.image && <AvatarImage src={user.image} alt={user.name} />}
+        <AvatarFallback>{initials(user.name)}</AvatarFallback>
+      </Avatar>
 
       <h2 className="mt-5 font-heading text-2xl font-bold tracking-tight">{user.name}</h2>
       <p className="mt-1 break-all text-sm text-muted-foreground">{user.email}</p>
@@ -74,10 +76,10 @@ export function ProfileCard() {
         ))}
       </div>
 
-      <button type="button" onClick={logout} className="btn-outline mt-6 w-full text-destructive">
+      <Button type="button" onClick={logout} variant="outline" className="mt-6 w-full text-destructive">
         <LogOut className="size-4" aria-hidden="true" />
         Logout
-      </button>
-    </div>
+      </Button>
+    </Card>
   );
 }

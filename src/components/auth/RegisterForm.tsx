@@ -11,6 +11,8 @@ import { PasswordInput } from "@/components/auth/PasswordInput";
 import { FormField, inputClass } from "@/components/shared/FormField";
 import { authClient } from "@/lib/auth-client";
 import { validatePassword } from "@/lib/validation";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -60,15 +62,15 @@ export function RegisterForm() {
     <form onSubmit={handleSubmit}>
       <fieldset disabled={pending} className="space-y-5">
         <FormField id="name" label="Name">
-          <input id="name" name="name" type="text" required autoComplete="name" placeholder="Your full name" className={inputClass} />
+          <Input id="name" name="name" type="text" required autoComplete="name" placeholder="Your full name" className={inputClass} />
         </FormField>
 
         <FormField id="email" label="Email">
-          <input id="email" name="email" type="email" required autoComplete="email" placeholder="you@example.com" className={inputClass} />
+          <Input id="email" name="email" type="email" required autoComplete="email" placeholder="you@example.com" className={inputClass} />
         </FormField>
 
         <FormField id="photo" label="Photo URL (optional)">
-          <input id="photo" name="photo" type="url" autoComplete="off" placeholder="https://example.com/your-photo.jpg" className={inputClass} />
+          <Input id="photo" name="photo" type="url" autoComplete="off" placeholder="https://example.com/your-photo.jpg" className={inputClass} />
         </FormField>
 
         <FormField id="password" label="Password" error={passwordError}>
@@ -87,10 +89,10 @@ export function RegisterForm() {
           <PasswordChecklist id="password-rules" password={password} />
         </FormField>
 
-        <button type="submit" className="btn-primary w-full">
+        <Button type="submit" className="w-full">
           {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
           {pending ? "Creating account..." : "Register"}
-        </button>
+        </Button>
       </fieldset>
 
       <SocialLogin callbackURL={"/"} />

@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { GoogleIcon } from "@/components/shared/SocialIcons";
 import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 
 /** "or" divider and the Google button. `callbackURL` is where the user lands after Google login. */
 export function SocialLogin({ callbackURL }: { callbackURL: string }) {
@@ -32,10 +33,10 @@ export function SocialLogin({ callbackURL }: { callbackURL: string }) {
         or
         <span className="h-px flex-1 bg-border" />
       </div>
-      <button type="button" onClick={handleGoogle} disabled={pending} className="btn-outline mt-6 w-full">
+      <Button type="button" onClick={handleGoogle} disabled={pending} variant="outline" className="mt-6 w-full">
         {pending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <GoogleIcon className="size-5" />}
         Continue with Google
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "@/components/shared/Reveal";
 import { BookCard } from "@/components/books/BookCard";
 import { getAllBooks } from "@/lib/books";
 import { CATEGORIES } from "@/lib/constants";
@@ -28,6 +29,7 @@ export default async function AllBooksPage({ searchParams }: Props) {
         </div>
       </header>
 
+      <Reveal>
       <section className="py-12 sm:py-16">
         <div className="container-page">
           <nav aria-label="Filter by category" className="flex flex-wrap justify-center gap-2">
@@ -63,6 +65,7 @@ export default async function AllBooksPage({ searchParams }: Props) {
           )}
         </div>
       </section>
+      </Reveal>
     </>
   );
 }

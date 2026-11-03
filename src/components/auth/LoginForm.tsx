@@ -9,6 +9,8 @@ import { SocialLogin } from "@/components/auth/SocialLogin";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { FormField, inputClass } from "@/components/shared/FormField";
 import { authClient } from "@/lib/auth-client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function LoginForm({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
@@ -44,7 +46,7 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
     <form onSubmit={handleSubmit}>
       <fieldset disabled={pending} className="space-y-5">
         <FormField id="email" label="Email">
-          <input id="email" name="email" type="email" required autoComplete="email" placeholder="you@example.com" className={inputClass} />
+          <Input id="email" name="email" type="email" required autoComplete="email" placeholder="you@example.com" className={inputClass} />
         </FormField>
 
         <FormField id="password" label="Password">
@@ -60,10 +62,10 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
           </div>
         </FormField>
 
-        <button type="submit" className="btn-primary w-full">
+        <Button type="submit" className="w-full">
           {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
           {pending ? "Logging in..." : "Login"}
-        </button>
+        </Button>
       </fieldset>
 
       <SocialLogin callbackURL={redirectTo} />

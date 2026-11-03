@@ -10,6 +10,9 @@ import { apiFetch } from "@/lib/api";
 import { CATEGORIES } from "@/lib/constants";
 import { uploadToImgbb } from "@/lib/imgbb";
 import type { Book } from "@/types";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 type EditBookModalProps = {
   book: Book;
@@ -76,10 +79,10 @@ export function EditBookModal({ book, onClose, onSaved }: EditBookModalProps) {
         <fieldset disabled={pending} className="space-y-5">
           <div className="grid gap-5 sm:grid-cols-2">
             <FormField id="edit-title" label="Book Title">
-              <input id="edit-title" name="title" type="text" required maxLength={150} defaultValue={book.title} className={inputClass} />
+              <Input id="edit-title" name="title" type="text" required maxLength={150} defaultValue={book.title} className={inputClass} />
             </FormField>
             <FormField id="edit-author" label="Author Name">
-              <input id="edit-author" name="author" type="text" required maxLength={100} defaultValue={book.author} className={inputClass} />
+              <Input id="edit-author" name="author" type="text" required maxLength={100} defaultValue={book.author} className={inputClass} />
             </FormField>
           </div>
 
@@ -137,17 +140,17 @@ export function EditBookModal({ book, onClose, onSaved }: EditBookModalProps) {
           </FormField>
 
           <FormField id="edit-description" label="Short Description">
-            <textarea id="edit-description" name="description" required maxLength={1000} rows={4} defaultValue={book.description} className={textareaClass} />
+            <Textarea id="edit-description" name="description" required maxLength={1000} rows={4} defaultValue={book.description} className={textareaClass} />
           </FormField>
 
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-            <button type="button" onClick={onClose} className="btn-outline">
+            <Button type="button" onClick={onClose} variant="outline">
               Cancel
-            </button>
-            <button type="submit" className="btn-primary">
+            </Button>
+            <Button type="submit">
               {pending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
               {pending ? "Saving..." : "Save Changes"}
-            </button>
+            </Button>
           </div>
         </fieldset>
       </form>

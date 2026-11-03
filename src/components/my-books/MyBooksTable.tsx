@@ -11,6 +11,7 @@ import { Spinner } from "@/components/shared/Spinner";
 import { useAuth } from "@/hooks/use-auth";
 import { apiFetch } from "@/lib/api";
 import type { Book } from "@/types";
+import { Button } from "@/components/ui/button";
 
 export function MyBooksTable() {
   const { user, isPending: sessionPending } = useAuth();
@@ -78,9 +79,9 @@ export function MyBooksTable() {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{errorMessage}</p>
-        <button type="button" onClick={retry} className="btn-primary mt-6">
+        <Button type="button" onClick={retry} className="mt-6">
           Try again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -134,10 +135,10 @@ export function MyBooksTable() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
-                      <button type="button" onClick={() => setEditing(book)} className="btn-outline h-10 px-4">
+                      <Button type="button" onClick={() => setEditing(book)} variant="outline" className="h-10 px-4">
                         <Pencil className="size-4" aria-hidden="true" />
                         Edit
-                      </button>
+                      </Button>
                       <button
                         type="button"
                         onClick={() => setDeleting(book)}
@@ -174,18 +175,18 @@ export function MyBooksTable() {
         description={deleting ? `"${deleting.title}" will be removed from the library. This cannot be undone.` : undefined}
       >
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <button type="button" onClick={() => setDeleting(null)} disabled={deletePending} className="btn-outline">
+          <Button type="button" onClick={() => setDeleting(null)} disabled={deletePending} variant="outline">
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={confirmDelete}
             disabled={deletePending}
-            className="btn bg-destructive text-white hover:bg-destructive/90"
+            variant="destructive"
           >
             {deletePending && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
             {deletePending ? "Deleting..." : "Yes, Delete"}
-          </button>
+          </Button>
         </div>
       </Modal>
     </>

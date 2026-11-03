@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Spinner } from "@/components/shared/Spinner";
 import { apiFetch } from "@/lib/api";
 import type { Borrow } from "@/types";
+import { Button } from "@/components/ui/button";
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -70,9 +71,9 @@ export function MyBorrowsTable() {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{errorMessage}</p>
-        <button type="button" onClick={retry} className="btn-primary mt-6">
+        <Button type="button" onClick={retry} className="mt-6">
           Try again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -132,15 +133,15 @@ export function MyBorrowsTable() {
                   {overdue && <span className="ml-2 rounded-full bg-destructive/10 px-2 py-0.5 text-xs text-destructive">Overdue</span>}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => handleReturn(borrow)}
                     disabled={returning}
-                    className="btn-outline h-10 px-4"
+                    variant="outline" className="h-10 px-4"
                   >
                     {returning ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Undo2 className="size-4" aria-hidden="true" />}
                     {returning ? "Returning..." : "Return Book"}
-                  </button>
+                  </Button>
                 </td>
               </tr>
             );

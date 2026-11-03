@@ -1,3 +1,4 @@
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 export const inputClass =
@@ -16,9 +17,7 @@ type FormFieldProps = {
 export function FormField({ id, label, error, className, children }: FormFieldProps) {
   return (
     <div className={cn("space-y-1.5", className)}>
-      <label htmlFor={id} className="text-sm font-medium">
-        {label}
-      </label>
+      <Label htmlFor={id} className="block">{label}</Label>
       {children}
       {error && (
         <p id={`${id}-error`} role="alert" className="text-sm text-destructive">
