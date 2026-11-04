@@ -18,13 +18,13 @@ export const NAV_LINKS: NavLink[] = [
 
 export const CONTACT = {
   email: "salemnurabir2@gmail.com",
-  phone: "+880 1700-000000",
+  phone: "+880 1730-992604",
   hours: "Online and open every day",
 } as const;
 
 export const SOCIAL_LINKS = {
-  x: "https://x.com",
-  facebook: "https://facebook.com",
+  x: "https://x.com/ar1b_3",
+  facebook: "https://www.facebook.com/share/1EUPQ3ciw7/",
   instagram: "https://instagram.com",
   github: "https://github.com/ABiR994",
 } as const;
