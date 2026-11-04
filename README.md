@@ -1,4 +1,4 @@
- <div align="center">
+<div align="center">
 
 <img src="https://raw.githubusercontent.com/ABiR994/booknook-client/Main/src/app/icon.svg" alt="BookNook Logo" width="90" />
 
@@ -62,27 +62,23 @@ BookNook is built with Next.js and TypeScript on the frontend, BetterAuth for au
 
 ### 🏠 Interactive Home Page
 
-The home page introduces the library with a responsive banner section and multiple slides featuring titles, descriptions, and Browse Books buttons.
+The home page introduces the library with a Swiper banner of three slides, each with a title, a short text, and a Browse Books button that opens the All Books page.
 
-Additional sections introduce the borrowing process and available book categories, helping visitors understand how the platform works.
+Below the banner, the page has three more sections:
 
-The **New Arrivals** section dynamically displays the latest 6 books from the database, with each card showing:
-
-- Book cover image
-- Title and author
-- Category
-- View Details button
-
-A See All Books button takes visitors to the complete library.
+- **New Arrivals:** the latest 6 books from the database, newest first. Each card shows the cover image, title, author, category, and a View Details button. A See All Books button leads to the complete library.
+- **How Borrowing Works:** four steps from creating an account to returning a book.
+- **Top Categories:** shortcuts to Fiction, Science, History, Kids, and Others. Each one opens All Books filtered to that category.
 
 ### 📚 All Books Library
 
 Browse the complete collection of books shared by library members.
 
 - Responsive card grid with 3 columns on desktop.
-- Book cover, title, author, and category.
+- Book cover, title, author, and category on every card.
 - View Details button for each book.
-- Dynamically loaded data from the Express API.
+- Category filter buttons (All, Fiction, Science, History, Kids, Others).
+- Data loaded dynamically from the Express API.
 
 ### 🔍 Book Details
 
@@ -91,10 +87,11 @@ Each book has a dedicated details page displaying its information:
 - Book cover and title.
 - Author and category.
 - Full description.
-- Information about the member who added it.
-- Borrow This Book action.
+- The member who added it and the date it was added.
+- Number of available copies.
+- Borrow This Book action (disabled and shown as "Not Available" when no copies are left).
 
-The borrowing action opens a confirmation modal with the logged-in user's information.
+The borrowing action opens a confirmation modal with the logged-in user's name and email.
 
 ### ➕ Add New Books
 
@@ -105,14 +102,12 @@ The form includes:
 - Book title
 - Author name
 - Category selection (Fiction, Science, History, Kids, Others)
-- Book image upload using ImgBB
+- Total copies
+- Book image upload using ImgBB (with a preview)
 - Short description
 - User name and email (automatically populated and read-only)
-- Total copies
 
-After submission, the book is saved to MongoDB with its creation date and available copy information.
-
-A success toast confirms the operation.
+After submission, the book is saved to MongoDB with its creation date and available copy information. A success toast confirms the operation.
 
 ### 📖 My Books – Manage Your Collection
 
@@ -120,13 +115,12 @@ The My Books page displays only the books added by the currently authenticated u
 
 Users can:
 
-- View their own book listings.
-- Edit existing books through a prefilled edit modal.
-- Update book information using a PATCH request.
-- Delete books using a custom confirmation modal.
-- See changes reflected in the interface after successful operations.
+- View their own book listings with the number of available copies.
+- Edit existing books through a modal with the current information already filled in. The cover is only uploaded again if a new one is chosen.
+- Delete books using a custom confirmation modal (not the browser's confirm dialog).
+- See changes reflected in the interface immediately after successful operations.
 
-Ownership checks prevent users from modifying or deleting books added by other members.
+Ownership checks on the server prevent users from modifying or deleting books added by other members. A book that is currently borrowed cannot be deleted, and total copies cannot be set below the number of copies currently on loan.
 
 ### 🔄 Borrow and Return System
 
@@ -136,24 +130,22 @@ BookNook includes a borrowing system that connects readers with books shared by 
 
 - Open a book's details page.
 - Click Borrow This Book.
-- Review the borrowing confirmation modal.
-- Confirm the borrowing operation.
-- Save the borrowing record to the database.
-- Automatically decrease the available copy count.
+- Review the confirmation modal with your name and email.
+- Confirm to save the borrowing record. The return date is set 7 days after borrowing.
+- The available copy count goes down by one.
 
 **Returning:**
 
 - Open My Borrows.
-- View borrowed books in a table.
-- Check borrowing and return dates.
-- Click Return Book to complete the return.
-- Automatically increase the available copy count.
+- View borrowed books in a table with image, title, borrow date and return date.
+- Overdue books are marked in red.
+- Click Return Book to complete the return. The available copy count goes up by one.
 
 Additional safeguards include:
 
-- Users cannot borrow the same book multiple times simultaneously.
+- Users cannot borrow the same book twice at the same time (an error toast is shown).
 - Books with zero available copies cannot be borrowed.
-- Available copies are updated through MongoDB atomic operations.
+- Available copies are updated through MongoDB atomic operations on the server.
 
 ### 🔐 Authentication with BetterAuth
 
@@ -165,7 +157,7 @@ Supported authentication methods:
 - Email and password login.
 - Google social login.
 
-Registration collects the user's name, email, profile photo URL, and password.
+Registration collects the user's name, email, an optional profile photo URL, and a password. After registering, the user is sent to the Login page.
 
 Password validation requires:
 
@@ -173,9 +165,11 @@ Password validation requires:
 - At least one lowercase letter.
 - A minimum length of 6 characters.
 
-After successful authentication, users are redirected to their intended destination or the home page.
+A live checklist shows which rules the password meets, and registration is blocked for an invalid password.
 
-Private routes are protected, and authentication state is maintained across page reloads.
+After login, users are sent back to the page they originally wanted, or to the home page. Visitors who are not logged in are redirected to Login when they open a private route, and the logged-in session stays active across page reloads.
+
+The Login page shows a "Forgot password?" link, but password reset is not implemented.
 
 ### 👤 User Profile and Navigation
 
@@ -185,45 +179,44 @@ The responsive navbar adapts to the user's authentication state.
 
 - Login button.
 - Register button.
-- Public navigation links.
+- Public navigation links (Home, All Books).
 
 **For authenticated users:**
 
-- Profile avatar.
-- Dropdown menu with user information.
-- My Profile option.
-- Logout action.
-- Access to private library features.
+- Profile avatar (initials are shown when there is no photo).
+- Dropdown menu with the user's name and email, My Profile, and Logout.
+- Add Book, My Books, and My Borrows links.
+
+The My Profile page shows the user's photo, name, email, and join date, with shortcuts to the private pages.
+
+The footer includes the logo, a short description, contact information, and social links (including the new X logo).
 
 ### 🌙 Dark and Light Theme
 
-The application includes a theme-switching option, allowing users to switch between dark and light appearances.
-
-Theme preferences are managed using next-themes.
+The navbar includes a button to switch between dark and light themes. Theme preferences are managed using next-themes.
 
 ### 🎨 Animations and Interactive UI
 
-The interface uses Motion for smooth animations and transitions, creating a more engaging browsing experience.
+The interface uses Motion for scroll-reveal animations on the home page and the All Books page. Visitors who prefer reduced motion do not see them.
 
-Swiper powers the home page slider, while shadcn/ui provides reusable interface components and interactive dialogs.
+Swiper powers the home page slider, while shadcn/ui provides reusable interface components such as dialogs, dropdowns, avatars, cards, inputs, and buttons.
 
 ### 🔔 Toasts, Loading States and 404
 
 The application provides feedback throughout user interactions.
 
 - Success and error toast notifications.
-- Loading indicators while fetching data.
+- Loading spinners while fetching data.
 - Custom not-found page with a Back to Home button.
-- Dynamic page titles across routes.
+- Dynamic page titles across routes (for example, "BookNook | All Books").
 - Custom confirmation dialogs instead of browser alerts.
 
 ### 📱 Fully Responsive
 
 The interface adapts to mobile phones, tablets, and desktop screens.
 
-- Responsive navigation.
-- Flexible book card grids.
-- Consistent card dimensions.
+- Responsive navigation with a mobile menu.
+- Flexible book card grids with equal card sizes.
 - Mobile-friendly forms and dialogs.
 - Horizontally scrollable tables on smaller screens.
 
@@ -238,13 +231,13 @@ The interface adapts to mobile phones, tablets, and desktop screens.
 | 🔷 TypeScript | Type-safe components, API data and application logic |
 | 🎨 Tailwind CSS 4 | Utility-first styling and responsive layouts |
 | 🧩 shadcn/ui | Dialogs, dropdowns, avatars, cards, inputs, labels and buttons |
-| 🔐 BetterAuth | Email/password and Google authentication |
+| 🔐 BetterAuth | Email/password and Google authentication, JWT issuing |
 | 🍃 MongoDB | Users, sessions, books and borrowing records |
 | 🚀 Express.js | Backend REST API |
-| 🎞️ Motion | UI animations and transitions |
+| 🎞️ Motion | Scroll animations |
 | 🖼️ Swiper | Responsive home page slider |
 | 🔔 Sonner | Toast notifications |
-| 🎨 next-themes | Dark and light theme management |
+| 🌓 next-themes | Dark and light theme management |
 | 🖼️ ImgBB | Book cover image hosting |
 | ▲ Vercel | Application deployment |
 
@@ -254,15 +247,15 @@ The interface adapts to mobile phones, tablets, and desktop screens.
 
 | Route | Description | Access |
 |---|---|---|
-| `/` | Home page, banner, categories and new arrivals | Public |
-| `/books` | Browse all available books | Public |
+| `/` | Home page: slider, new arrivals, how borrowing works and top categories | Public |
+| `/books` | Browse all available books (supports `?category=`) | Public |
 | `/books/[id]` | Individual book details | 🔒 Login required |
 | `/add-book` | Add a new book to the library | 🔒 Login required |
 | `/my-books` | Manage books added by the user | 🔒 Login required |
 | `/my-borrows` | View and return borrowed books | 🔒 Login required |
+| `/profile` | User profile and account information | 🔒 Login required |
 | `/login` | User login | Public |
 | `/register` | User registration | Public |
-| `/my-profile` | User profile and account information | 🔒 Login required |
 
 ---
 
@@ -274,7 +267,7 @@ BookNook uses a separate Express.js REST API connected to MongoDB.
 
 | Method | Endpoint | Access | Description |
 |---|---|---|---|
-| GET | `/books` | Public | Retrieve all books |
+| GET | `/books` | Public | Retrieve all books (`?sort=newest&limit=6` for new arrivals) |
 | GET | `/books/:id` | Public | Retrieve a single book |
 | POST | `/books` | Private | Add a new book |
 | PATCH | `/books/:id` | Private | Update a book (owner only) |
@@ -283,13 +276,13 @@ BookNook uses a separate Express.js REST API connected to MongoDB.
 | GET | `/borrows` | Private | Retrieve the logged-in user's borrows |
 | DELETE | `/borrows/:id` | Private | Return a borrowed book |
 
-Private API requests include:
+Private API requests include a JWT issued by BetterAuth:
 
 ```http
 Authorization: Bearer <token>
 ```
 
-The backend validates JWTs using BetterAuth's JWKS endpoint before allowing protected operations.
+The backend validates the token using BetterAuth's JWKS endpoint before allowing protected operations.
 
 ### Database Collections
 
@@ -318,7 +311,7 @@ Stores borrowing information:
 - Borrow date
 - Return date
 
-The backend handles copy recalculation and prevents duplicate active borrowing of the same book by a user.
+BetterAuth also stores users, sessions and signing keys in the same MongoDB database. The backend handles copy recalculation and prevents duplicate active borrowing of the same book by a user.
 
 ---
 
@@ -332,30 +325,40 @@ booknook-client/
 │   ├── app/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
+│   │   ├── loading.tsx
+│   │   ├── not-found.tsx
 │   │   ├── globals.css
 │   │   │
-│   │   ├── books/
+│   │   ├── books/              # all books and [id] details
 │   │   ├── add-book/
 │   │   ├── my-books/
 │   │   ├── my-borrows/
-│   │   ├── my-profile/
+│   │   ├── profile/
 │   │   │
 │   │   ├── login/
 │   │   ├── register/
 │   │   │
 │   │   └── api/
 │   │       └── auth/
-│   │           └── [...all]/
+│   │           └── [...all]/   # BetterAuth route handler
 │   │
 │   ├── components/
-│   │   ├── ui/
-│   │   ├── layout/
-│   │   ├── home/
-│   │   ├── books/
-│   │   ├── auth/
-│   │   └── profile/
+│   │   ├── ui/                 # shadcn/ui components
+│   │   ├── layout/             # navbar, footer, user menu, theme toggle
+│   │   ├── home/               # slider and home sections
+│   │   ├── books/              # book card, add book form, borrow button
+│   │   ├── my-books/           # my books table, edit modal
+│   │   ├── borrows/            # my borrows table
+│   │   ├── auth/               # login, register and social login forms
+│   │   ├── profile/
+│   │   ├── providers/          # theme provider
+│   │   └── shared/             # logo, modal, form field, spinner, reveal
 │   │
-│   └── lib/
+│   ├── data/                   # static home page content
+│   ├── hooks/                  # useAuth
+│   ├── lib/                    # auth, API helper, ImgBB upload, validation, constants
+│   ├── types/
+│   └── proxy.ts                # redirects logged-out visitors from private routes
 │
 ├── .env.example
 ├── components.json
@@ -375,7 +378,7 @@ booknook-client/
 - A free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster
 - A Google OAuth application for Google sign-in
 - An [ImgBB API key](https://api.imgbb.com/) for book image uploads
-- A running BookNook Express API server
+- A running BookNook Express API server ([booknook-server](https://github.com/ABiR994/booknook-server))
 
 ### Installation
 
@@ -420,6 +423,8 @@ Fill in the required values in `.env.local`:
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
 | `NEXT_PUBLIC_API_URL` | Express backend URL |
 | `NEXT_PUBLIC_IMGBB_API_KEY` | ImgBB API key for uploading book covers |
+
+> **Note:** BetterAuth encrypts its JWT signing keys, which are stored in the database, with `BETTER_AUTH_SECRET`. Every deployment that uses the same database must use the same secret, or sign-in will fail with a "Failed to decrypt private key" error. Use a separate database for a separate secret.
 
 ### Google OAuth Configuration
 
@@ -469,12 +474,12 @@ When deploying your own copy:
 
 1. Import the client repository into Vercel.
 2. Add all required environment variables in the project settings.
-3. Set `BETTER_AUTH_URL` to your production frontend URL.
+3. Set `BETTER_AUTH_URL` to your production frontend URL (with `https` and no trailing slash).
 4. Set `NEXT_PUBLIC_API_URL` to your deployed Express API URL.
 5. Configure the production Google OAuth callback URL.
-6. Ensure the backend allows requests from your frontend origin through CORS.
+6. Make sure the backend's `CLIENT_URL` and `AUTH_BASE_URL` match your frontend URL.
 7. Configure MongoDB Atlas network access for the deployed application.
-8. Redeploy after changing environment variables.
+8. Redeploy after changing environment variables (variables starting with `NEXT_PUBLIC_` are built into the site).
 
 The Express backend is maintained separately in the [booknook-server](https://github.com/ABiR994/booknook-server) repository.
 
@@ -495,4 +500,3 @@ CSE Student | Aspiring Software Engineer
 <a href="https://abir994.pro.bd/">
   <img src="https://img.shields.io/badge/Portfolio-Visit%20Website-15803d?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio" />
 </a>
-
